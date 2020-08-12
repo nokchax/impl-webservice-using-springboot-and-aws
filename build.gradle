@@ -29,8 +29,8 @@ version '1.0-SNAPSHOT'
 sourceCompatibility = 1.8
 
 /*
-    buildscript 내의 repositories 와는 무슨 차이일까?
-    The repositories in the buildScript block are used to fetch the dependencies of your buildScript dependencies.
+    Q) buildscript 내의 repositories 와는 무슨 차이일까?
+    A) The repositories in the buildScript block are used to fetch the dependencies of your buildScript dependencies.
     These are the dependencies that are put on the classpath of your build and that you can refer to from your build file.
     For instance extra plugins that exist on the internet.
     The repositories on the root level are used to fetch the dependencies that your project depends on.
