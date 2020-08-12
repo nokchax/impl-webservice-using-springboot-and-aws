@@ -1,14 +1,50 @@
-plugins {
-    id 'java'
+/*
+    If your build script needs to use external libraries,
+    you can add them to the script’s classpath in the build script itself.
+    You do this using the buildscript() method, passing in a block which declares the build script classpath.
+ */
+buildscript {
+    ext { // extra properties 의 약자, build.gradle 에서 사용하는 전역변수 선언
+        springBootVersion = '2.3.2.RELEASE'
+    }
+
+    repositories {
+        mavenCentral()
+        jcenter()
+    }
+
+    dependencies { // 프로젝트의 플러그인 의존성 관리
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+    }
 }
+
+// 앞서 선언한 플러그인 의존성을 적용할 것인지를 결정
+apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: 'org.springframework.boot'
+apply plugin: 'io.spring.dependency-management' // 스프링 부트의 의존성을 관리해 주는 플러그인
 
 group 'com.nokchax.book'
 version '1.0-SNAPSHOT'
+sourceCompatibility = 1.8
 
-repositories {
+/*
+    buildscript 내의 repositories 와는 무슨 차이일까?
+    The repositories in the buildScript block are used to fetch the dependencies of your buildScript dependencies.
+    These are the dependencies that are put on the classpath of your build and that you can refer to from your build file.
+    For instance extra plugins that exist on the internet.
+    The repositories on the root level are used to fetch the dependencies that your project depends on.
+    So all the dependencies you need to compile your project.
+
+    ref: https://stackoverflow.com/questions/13923766/gradle-buildscript-dependencies
+ */
+repositories { // 각종 의존성을 어느 원격 저장소에서 받을 것인지
     mavenCentral()
+    jcenter()
 }
 
-dependencies {
-    testCompile group: 'junit', name: 'junit', version: '4.12'
+dependencies { // 프로젝트 개발에 필요한 의존성들을 선언
+    // 특정 버전을 명시하지 않아야만 맨 위에 작성한 springBootVersion 의 버전을 따르게 된다.
+    compile('org.springframework.boot:spring-boot-starter-web')
+    compile('org.springframework.boot:spring-boot-starter-test')
 }
