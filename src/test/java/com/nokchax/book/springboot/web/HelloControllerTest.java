@@ -12,6 +12,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
+/**
+ * RunWith 어노테이션은 JUnit 프레임워크가 테스트를 실행할 시(JUnit은 내장된 Runner를 테스트 시 실행하고 됨) 테스트 실행방법을 확장할 때 쓰는 어노테이션 입니다.
+ * 쉽게 말해 JUnit 프레임워크가 내장된 Runner를 실행할 때 @Runwith 어노테이션을 통해 SpringRunner.class라는 확장된 클래스를 실행하라고 지시한 것입니다.
+ *
+ * ref) https://engkimbs.tistory.com/768
+ */
 //todo @RunWith 와 SpringRunner 에 대하여
 @RunWith(SpringRunner.class)
 @WebMvcTest // @Controller, @ControllerAdvice 를 사용할 수 있음 / @Service, @Repository, @Component 는 사용 못한다.
