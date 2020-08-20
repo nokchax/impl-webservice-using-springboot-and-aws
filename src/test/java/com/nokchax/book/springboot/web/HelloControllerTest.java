@@ -1,18 +1,17 @@
 package com.nokchax.book.springboot.web;
 
+import com.nokchax.book.springboot.web.dto.HelloResponseDto;
 import org.junit.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.CoreMatchers.is;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 
 /**
@@ -22,9 +21,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * ref) https://engkimbs.tistory.com/768
  */
 //todo @RunWith 와 SpringRunner 에 대하여
-//@RunWith(SpringRunner.class) // junit4를 사용할 경우 써줘야 함 Junit5부터는 쓸필요 없다
+@RunWith(SpringRunner.class) // junit4를 사용할 경우 써줘야 함 Junit5부터는 쓸필요 없다
 //@ExtendWith(SpringExtension.class)
-//@WebMvcTest // @Controller, @ControllerAdvice 를 사용할 수 있음 / @Service, @Repository, @Component 는 사용 못한다.
+@WebMvcTest // @Controller, @ControllerAdvice 를 사용할 수 있음 / @Service, @Repository, @Component 는 사용 못한다.
 // 그러면 @ControllerAdvice 는..?
 public class HelloControllerTest {
     @Autowired
@@ -39,4 +38,26 @@ public class HelloControllerTest {
                 .andExpect(content().string(hello)); // 본문 내용을 검증
     }
 
+    @Test
+    public void lombokTest() throws Exception {
+        //given
+        String name = "test";
+        int amount = 1000;
+
+        //when
+        HelloResponseDto response = new HelloResponseDto(name, amount);
+
+        //then
+        assertThat(response.getName()).isEqualTo(name);
+        assertThat(response.getAmount()).isEqualTo(amount);
+
+        mvc.perform(
+                get("/hello/dto")
+                        .param("name", name)
+                        .param("amount", String.valueOf(amount))
+        )
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.name", is(name)))
+                .andExpect(jsonPath("$.amount", is(amount)));
+    }
 }
